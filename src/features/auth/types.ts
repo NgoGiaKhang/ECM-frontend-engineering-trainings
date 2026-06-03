@@ -1,10 +1,17 @@
 export type User = {
   id: string;
-  name: string;
   email: string;
+  roles: ReadonlyArray<string>;
+  fullname: string;
 };
 
-export type LoginResponse = {
+export interface LoginResponse {
+  accessToken: string;
   user: User;
-  token: string;
+}
+
+export type RegisterRequest = {
+    fullname: string;
+    email: string;
+    password: string;
 };

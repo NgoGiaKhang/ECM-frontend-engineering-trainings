@@ -1,6 +1,6 @@
 import type { Rule } from "./types";
 
-export const isRequired =
+export const required =
   (message = "This field is required"): Rule =>
   (value) => {
     if (value === undefined || value === null || value === "") {
@@ -14,7 +14,7 @@ export const isRequired =
     return undefined;
   };
 
-export const isUrl =
+export const url =
   (message = "Invalid URL"): Rule =>
   (value) => {
     if (value === undefined || value === null || value === "") {
@@ -80,7 +80,7 @@ export const maxNumber =
     return undefined;
   };
 
-export const isEmail =
+export const email =
   (message = "Invalid email address"): Rule =>
   (value) => {
     if (value === undefined || value === null || value === "") {

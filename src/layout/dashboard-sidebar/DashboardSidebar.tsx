@@ -15,6 +15,9 @@ import { NavLink, useLocation, useNavigation } from "react-router-dom";
 import { routes } from "../../constants/routes";
 
 import styles from "./styles.module.css";
+import { toast } from "sonner";
+import { authService } from "@/features/auth/auth.service";
+import { useAuthStore } from "@/features/auth/auth.store";
 
 type Props = {
     open?: boolean;
@@ -43,7 +46,13 @@ export const DashboardSidebar = ({
     open = true,
     onClose,
 }: Props) => {
+    const logout = useAuthStore((s) => s.logout);
 
+    const handleLogout = async () => {
+        await authService.logout()
+        logout();
+        toast.success("Logged out successfully.")
+    }
     return (
         <>
 
@@ -92,7 +101,7 @@ export const DashboardSidebar = ({
 
                 {/* footer */}
                 <div className={styles.footer}>
-                    <button className={styles.logout}>
+                    <button className={styles.logout} onClick={handleLogout}>
                         <LogOut size={18} />
 
                         <span>Logout</span>

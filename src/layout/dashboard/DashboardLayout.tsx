@@ -2,13 +2,13 @@ import styles from "./styles.module.css";
 import { Outlet } from "react-router-dom";
 import { DashboardSidebar } from "../dashboard-sidebar/DashboardSidebar";
 import { DashboardHeader } from "../dashboard-header/DashboardHeader";
-import { Toaster } from "sonner";
-import { OfflineBanner } from "@/components/OfflineBanner/OfflineBanner";
+
 
 
 
 
 export const DashboardLayout = () => {
+    
     return (
         <div className={styles.layout}>
             <div className={styles.sidebar}>
@@ -24,8 +24,6 @@ export const DashboardLayout = () => {
                     {<Outlet />}
                 </div>
             </main>
-            <Toaster />
-            <OfflineBanner />
         </div>
     );
 }

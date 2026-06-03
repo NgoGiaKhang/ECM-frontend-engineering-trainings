@@ -2,8 +2,8 @@
 
 import Form from "../../../../components/FormField/Form";
 import {
-  isRequired,
-  isUrl,
+  required,
+  url,
   minLength,
   minNumber,
 } from "../../../../core/validator";
@@ -31,20 +31,20 @@ const initialState: FormData = {
 };
 
 const validator = new Validator({
-  name: [isRequired("Product name is required")],
+  name: [required("Product name is required")],
 
   description: [
-    isRequired("Description is required"),
+    required("Description is required"),
     minLength(10, "Description must be at least 10 characters"),
   ],
 
   price: [
-    isRequired("Price is required"),
+    required("Price is required"),
     minNumber(1, "Price must be greater than 0"),
   ],
 
-  category: [isRequired("Category is required")],
-  imageUrl: [isRequired("Image URL is required"), isUrl("Invalid image URL")],
+  category: [required("Category is required")],
+  imageUrl: [required("Image URL is required"), url("Invalid image URL")],
 });
 
 export default function CreateProductForm() {

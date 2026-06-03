@@ -1,21 +1,20 @@
 import { LoaderCircle } from "lucide-react";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-
-import type { ApiErrorResponse } from "../../../../api/types";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Form from "../../../../components/FormField/Form";
+import type { ApiErrorResponse } from "../../../../api/types";
 import TextField from "../../../../components/FormField/TextField";
 import SubmitButton from "../../../../components/SubmitButton";
 import { routes } from "../../../../constants/routes";
 import { Validator } from "../../../../core/validator/Validator";
-import { isEmail, isRequired } from "../../../../core/validator/validators";
+import { email, required } from "../../../../core/validator/validators";
 import { authService } from "../../auth.service";
 import { useAuthStore } from "../../auth.store";
 import styles from "./styles.module.css";
 
 const validator = new Validator({
-  email: [isRequired("Email must not be empty"), isEmail()],
-  password: [isRequired("Password must not be empty")],
+  email: [required("Email must not be empty"), email()],
+  password: [required("Password must not be empty")],
 });
 
 type FormData = {
@@ -35,7 +34,7 @@ export default function LoginPage() {
   const handleLogin = async (a: FormData) => {
     try {
       const data = await authService.login(a.email, a.password);
-      login(data.user, data.token);
+      login(data.user);
       navigate(routes.home);
     } catch (e) {
       const apiError = e as ApiErrorResponse;
@@ -49,7 +48,7 @@ export default function LoginPage() {
         <h1 className={styles.title}>Welcome back</h1>
 
         <p className={styles.subtitle}>Login to continue shopping</p>
-        {error && <p className={styles.error}>{error}</p>}
+        {error && <p className={styles.errorMessage}>{error}</p>}
         <Form<FormData>
           className={styles.form}
           initialState={initialForm}
@@ -60,14 +59,14 @@ export default function LoginPage() {
             type="email"
             placeholder="Email"
             name="email"
-            className={styles.input}
+
           />
 
           <TextField
             type="password"
             name="password"
             placeholder="Password"
-            className={styles.input}
+
           />
 
           <SubmitButton
@@ -79,7 +78,7 @@ export default function LoginPage() {
         </Form>
 
         <p className={styles.footerText}>
-          Don’t have an account? <a href="#">Sign up</a>
+          Don’t have an account? <Link to={routes.register}>Sign up</Link>
         </p>
       </div>
     </div>

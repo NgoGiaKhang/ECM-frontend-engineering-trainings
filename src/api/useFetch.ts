@@ -14,13 +14,18 @@ type QueryKey = readonly unknown[];
 
 type Fetcher<T> = (signal: AbortSignal) => Promise<T>;
 
-export function useFetch<T>(queryKey: QueryKey, fetcher: Fetcher<T>) {
+type UseFetchOptions<T> = {
+  onError?: (error: ApiErrorResponse) => void;
+  onSuccess?: (data: T) => void;
+};
+
+export function useFetch<T>(queryKey: QueryKey, fetcher: Fetcher<T>, options?: UseFetchOptions<T>) {
   const abortRef = useRef<AbortController | null>(null);
   const key = JSON.stringify(queryKey);
   const [state, setState] = useState<UseFetchState<T>>({
     data: null,
 
-    loading: false,
+    loading: true,
 
     error: null,
   });
@@ -55,6 +60,7 @@ export function useFetch<T>(queryKey: QueryKey, fetcher: Fetcher<T>) {
         error: null,
       });
 
+      options?.onSuccess?.(data);
       return data;
     } catch (e: unknown) {
       const error = e as ApiErrorResponse;
@@ -76,6 +82,7 @@ export function useFetch<T>(queryKey: QueryKey, fetcher: Fetcher<T>) {
         loading: false,
         error: error as ApiErrorResponse,
       });
+      options?.onError?.(error as ApiErrorResponse);  
     }
   }, [fetcher]);
 

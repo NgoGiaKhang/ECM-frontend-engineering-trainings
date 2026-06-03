@@ -1,6 +1,6 @@
 import {
-  isRequired,
-  isUrl,
+  required,
+  url,
   maxNumber,
   minNumber,
   Validator,
@@ -85,12 +85,12 @@ export const isSku =
   };
 
 export const productValidator = new Validator({
-  sku: [isRequired("SKU is required"), isSku()],
-  slug: [isRequired("Slug is required"), isSlug()],
-  name: [isRequired("Name is required")],
+  sku: [required("SKU is required"), isSku()],
+  slug: [required("Slug is required"), isSlug()],
+  name: [required("Name is required")],
 
   price: [
-    isRequired("Price is required"),
+    required("Price is required"),
     minNumber(1, "Price must be greater than 0"),
   ],
 
@@ -98,8 +98,8 @@ export const productValidator = new Validator({
 
   discountPercent: [minNumber(0, "Min 0%"), maxNumber(100, "Max 100%")],
 
-  thumbnail: [isRequired("Thumbnail is required"), isUrl()],
+  thumbnail: [required("Thumbnail is required"), url()],
 
-  brandId: [isRequired("Brand is required")],
+  brandId: [required("Brand is required")],
   tags: [validateTags()],
 });

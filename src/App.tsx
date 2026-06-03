@@ -12,25 +12,33 @@ import { ProductPage } from "./features/dashboard/product/pages/ProductPage/Prod
 import { DashboardLayout } from "./layout/dashboard/DashboardLayout";
 import { ProductFormPage } from "./features/dashboard/product/pages/CreateProductPage";
 import { UpdateProductPage } from "./features/dashboard/product/pages/UpdateProductPage";
+import { AuthInitializer } from "./features/auth/AuthInitializer";
+import Authorize from "./features/auth/AuthorizeRoute";
+import RegisterPage from "./features/auth/pages/RegisterPage/RegisterPage";
+
 function App() {
   return (
-    <Routes>
-      <Route element={<AppLayout />} errorElement={<UnknownErrorPage />}>
-        <Route path={routes.home} element={<HomePage />} />
-
-        <Route path={routes.productDetails} element={<ProductDetailPage />} />
-        <Route path={routes.cart} element={<CartPage />} />
-        <Route path={routes.login} element={<LoginPage />} />
-        <Route path={routes.error} element={<UnknownErrorPage />}></Route>
-        <Route path="*" element={<NotFoundPage />} />
-      </Route>
-      <Route element={<DashboardLayout />} errorElement={<UnknownErrorPage />}>
-        <Route path={routes.createProduct} element={<ProductFormPage />} />
-        <Route path={routes.manageProducts} element={<ProductPage />} />
-        <Route path={routes.updateProducts} element={<UpdateProductPage />} />
-        <Route path={routes.adminNotFound} element={<NotFoundPage />} />
-      </Route>
-    </Routes>
+    <AuthInitializer>
+      <Routes>
+        <Route element={<AppLayout />} errorElement={<UnknownErrorPage />}>
+          <Route path={routes.home} element={<HomePage />} />
+          <Route path={routes.productDetails} element={<ProductDetailPage />} />
+          <Route path={routes.cart} element={<CartPage />} />
+          <Route path={routes.login} element={<LoginPage />} />
+          <Route path={routes.register} element={<RegisterPage />} />
+          <Route path={routes.error} element={<UnknownErrorPage />}></Route>
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
+        <Route element={<Authorize minimum="moderator" />} errorElement={<UnknownErrorPage />}>
+          <Route element={<DashboardLayout />} errorElement={<UnknownErrorPage />}>
+            <Route path={routes.createProduct} element={<ProductFormPage />} />
+            <Route path={routes.manageProducts} element={<ProductPage />} />
+            <Route path={routes.updateProducts} element={<UpdateProductPage />} />
+            <Route path={routes.adminNotFound} element={<NotFoundPage />} />
+          </Route>
+        </Route>
+      </Routes>
+    </AuthInitializer>
   );
 }
 

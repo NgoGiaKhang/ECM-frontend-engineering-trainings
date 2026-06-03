@@ -2,9 +2,12 @@ import axios, {
   AxiosError,
   type AxiosInstance,
   type AxiosRequestConfig,
+  type InternalAxiosRequestConfig,
 } from "axios";
 
 import type { ApiErrorResponse } from "./types";
+import type { TokenProvider } from "./token.provider";
+import { NoRefreshTokenLocalStorageProvider } from "./token-local-storage.provider";
 
 const BASE_API_URL = import.meta.env.VITE_BASE_API || "/api";
 const API_TIMEOUT = Number(import.meta.env.VITE_API_TIMEOUT) || 10000;
@@ -14,8 +17,9 @@ export const DEFAULT_ERROR_CODE = "UNKNOWN_ERROR";
 export const REQUEST_CANCELED_CODE = "REQUEST_CANCELED";
 class HttpClient {
   private instance: AxiosInstance;
-
-  constructor() {
+  private readonly tokenProvider: TokenProvider;
+  constructor(tokenProvider: TokenProvider) {
+    this.tokenProvider = tokenProvider;
     this.instance = axios.create({
       baseURL: BASE_API_URL,
       timeout: API_TIMEOUT,
@@ -48,6 +52,42 @@ class HttpClient {
         });
       },
     );
+    this.initializeRequestInterceptor();
+  }
+
+  private initializeRequestInterceptor(): void {
+    this.instance.interceptors.request.use(
+      async (
+        config: InternalAxiosRequestConfig,
+      ): Promise<InternalAxiosRequestConfig> => {
+        // Transparently lets the current provider handle authentication headers or configuration strategies
+        return await this.tokenProvider.configure(config);
+      },
+      (error) => {
+        // Forward interceptor configuration/network parsing failures immediately down the chain
+        return Promise.reject(error);
+      },
+    );
+  }
+
+  /**
+   * Manually pushes a new token payload into the active storage provider.
+   * Useful during manual auth updates or bootstrapping workflows.
+   * @param payload - The raw response data containing the token (e.g., { data: { accessToken: '...' } })
+   */
+  public async setToken(payload: unknown): Promise<void> {
+    await this.tokenProvider.persist(payload);
+  }
+
+  /**
+   * Evicts the active credentials from the storage provider.
+   * Useful during manual logouts or when an unrecoverable 401 error occurs.
+   */
+  public async clearToken(): Promise<void> {
+    await this.tokenProvider.clear();
+  }
+  public async hasBearerToken(): Promise<boolean> {
+    return (await this.tokenProvider.bearer()) !== null;
   }
 
   // GET
@@ -93,4 +133,4 @@ class HttpClient {
   }
 }
 
-export const api = new HttpClient();
+export const api = new HttpClient(new NoRefreshTokenLocalStorageProvider());

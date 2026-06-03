@@ -6,14 +6,18 @@ import { HashRouter } from "react-router-dom";
 
 import App from "./App.tsx";
 import ScrollToTop from "./components/ScrollToTop.tsx";
-import { enableMocking } from "./mocks/index.ts";
+import { OfflineBanner } from "./components/OfflineBanner/OfflineBanner.tsx";
+import { Toaster } from "sonner";
 
 
 createRoot(document.getElementById("root")!).render(
-    <StrictMode>
-      <HashRouter>
-        <ScrollToTop />
-        <App />
-      </HashRouter>
-    </StrictMode>,
-  );
+  <StrictMode>
+    <HashRouter>
+      <ScrollToTop />
+      <App />
+
+      <Toaster position="top-center" />
+      <OfflineBanner />
+    </HashRouter>
+  </StrictMode>,
+);

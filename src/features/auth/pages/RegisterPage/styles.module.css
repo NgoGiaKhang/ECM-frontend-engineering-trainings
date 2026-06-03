@@ -45,8 +45,6 @@
   color: var(--color-text-muted);
 }
 
-
-
 .button {
   margin-top: var(--space-2);
 
@@ -107,6 +105,54 @@
   color: var(--color-error);
   font-size: var(--text-sm);
   margin-top: var(--space-2);
+}
+
+.passwordStrength {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bar {
+  display: flex;
+  gap: 4px;
+}
+
+.segment {
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background-color: #e5e7eb;
+  transition: background-color 0.2s ease;
+}
+
+.active {
+  background-color: currentColor;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.score1 {
+  color: #ef4444;
+}
+
+.score2 {
+  color: #f97316;
+}
+
+.score3 {
+  color: #f59e0b;
+}
+
+.score4 {
+  color: #22c55e;
+}
+
+.score5 {
+  color: #16a34a;
 }
 
 @keyframes spin {

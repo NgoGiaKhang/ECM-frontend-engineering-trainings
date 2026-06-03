@@ -1,3 +1,4 @@
 export const ErrorCode = {
-    ValidationError: "VALIDATION_ERROR"
+    ValidationError: "VALIDATION_ERROR",
+    TokenExpired: "TOKEN_EXPIRED",
 }

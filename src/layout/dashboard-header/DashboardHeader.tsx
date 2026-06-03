@@ -10,12 +10,15 @@ import {
 import { Link } from "react-router-dom";
 
 import styles from "./styles.module.css";
+import { useAuthStore } from "../../features/auth/auth.store";
 
 type Props = {
     onToggleSidebar?: () => void;
 };
 
 export const DashboardHeader = (_props: Props) => {
+    const user = useAuthStore((s) => s.user);
+
     return (
         <header className={styles.header}>
 
@@ -46,15 +49,23 @@ export const DashboardHeader = (_props: Props) => {
                     </span>
                 </button>
 
-                <Link
-                    to="/profile"
-                    className={
-                        styles.iconButton
-                    }
-                >
-                    <User size={18} />
-                </Link>
+                {user ? (
+                    <Link
+                        to="/profile"
+                        className={`${styles.iconButton} ${styles.userButton}`}
+                    >
+                        <User size={18} />
+                        <span className={styles.userName}>{user.fullname}</span>
+                    </Link>
+                ) : (
+                    <Link
+                        to="/profile"
+                        className={styles.iconButton}
+                    >
+                        <User size={18} />
+                    </Link>
+                )}
             </div>
         </header>
     );
-}
+};

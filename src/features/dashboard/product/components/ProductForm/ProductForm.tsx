@@ -6,6 +6,7 @@ import SelectField from "@/components/FormField/SelectField";
 import { CategorySelect } from "@/features/dashboard/category";
 import { BrandSelect } from "@/features/dashboard/brand";
 import { productValidator } from "./validate";
+import { FormContainer } from "@/components/FormField/FormContainer";
 type ProductFormProps = {
     initialValues: ProductFormType;
     onSubmit: (data: ProductFormType) => Promise<void> | void;
@@ -46,81 +47,83 @@ export function ProductForm({
     };
 
     return (
-        <Form<ProductFormType>
-            initialState={initialValues}
-            onSubmit={handleSubmit}
-            validator={productValidator}
-        >
-            {/* BASIC */}
-            <TextField<ProductFormType>
-                name="sku"
-                label="SKU"
-            />
+        <FormContainer>
+            <Form<ProductFormType>
+                initialState={initialValues}
+                onSubmit={handleSubmit}
+                validator={productValidator}
+            >
+                {/* BASIC */}
+                <TextField<ProductFormType>
+                    name="sku"
+                    label="SKU"
+                />
 
-            <TextField<ProductFormType>
-                name="slug"
-                label="Slug"
-            />
+                <TextField<ProductFormType>
+                    name="slug"
+                    label="Slug"
+                />
 
-            <TextField<ProductFormType>
-                name="name"
-                label="Product Name"
-            />
+                <TextField<ProductFormType>
+                    name="name"
+                    label="Product Name"
+                />
 
-            <TextAreaField<ProductFormType>
-                name="description"
-                label="Description"
-            />
+                <TextAreaField<ProductFormType>
+                    name="description"
+                    label="Description"
+                />
 
-            {/* PRICE */}
-            <TextField<ProductFormType>
-                name="price"
-                label="Price"
-                type="number"
-            />
+                {/* PRICE */}
+                <TextField<ProductFormType>
+                    name="price"
+                    label="Price"
+                    type="number"
+                />
 
-            <TextField<ProductFormType>
-                name="originalPrice"
-                label="Original Price"
-                type="number"
-            />
+                <TextField<ProductFormType>
+                    name="originalPrice"
+                    label="Original Price"
+                    type="number"
+                />
 
-            <TextField<ProductFormType>
-                name="discountPercent"
-                label="Discount %"
-                type="number"
-            />
+                <TextField<ProductFormType>
+                    name="discountPercent"
+                    label="Discount %"
+                    type="number"
+                />
 
-            {/* MEDIA */}
-            <TextField<ProductFormType>
-                name="thumbnail"
-                label="Thumbnail URL"
-            />
+                {/* MEDIA */}
+                <TextField<ProductFormType>
+                    name="thumbnail"
+                    label="Thumbnail URL"
+                />
 
-            {/* RELATION */}
-            <SelectField<ProductFormType>
-                component={BrandSelect}
-                name="brandId"
-                label="Brand"
-                options={[]}
-            />
+                {/* RELATION */}
+                <SelectField<ProductFormType>
+                    component={BrandSelect}
+                    name="brandId"
+                    label="Brand"
+                    options={[]}
+                />
 
-            <SelectField<ProductFormType>
-                component={CategorySelect}
-                name="categoryId"
-                label="Category"
-                options={[]}
-            />
+                <SelectField<ProductFormType>
+                    component={CategorySelect}
+                    name="categoryId"
+                    label="Category"
+                    options={[]}
+                />
 
-            {/* TAGS */}
-            <TextAreaField<ProductFormType>
-                name="tags"
-                label="Tags (comma separated)"
-            />
+                {/* TAGS */}
+                <TextAreaField<ProductFormType>
+                    name="tags"
+                    label="Tags (comma separated)"
+                />
 
-            <SubmitButton>
-                {submitText}
-            </SubmitButton>
-        </Form>
+                <SubmitButton>
+                    {submitText}
+                </SubmitButton>
+            </Form>
+        </FormContainer>
     );
 }

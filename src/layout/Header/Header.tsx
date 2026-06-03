@@ -10,6 +10,9 @@ import { useAuthStore } from "../../features/auth/auth.store";
 import { useCartStore } from "../../features/cart/cart.store";
 import CartDropdown from "../../features/cart/components/CartDropdown/CartDropdown";
 import styles from "./styles.module.css";
+import { authService } from "@/features/auth/auth.service";
+import Button from "@/components/Button/Button";
+import { toast } from "sonner";
 
 export default function Header() {
   const [openCart, setOpenCart] = useState(false);
@@ -21,8 +24,13 @@ export default function Header() {
 
   const totalItem = useCartStore((s) => s.totalItems());
   const user = useAuthStore((s) => s.user);
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const logout = useAuthStore((s) => s.logout);
+
+  const handleLogout = async () => {
+    await authService.logout()
+    logout();
+    toast.success("Logged out successfully.")
+  }
 
   return (
     <header className={styles.header}>
@@ -40,13 +48,6 @@ export default function Header() {
             >
               <Link to={routes.home}>Home</Link>
             </li>
-            {isAuthenticated && (
-              <li
-                className={`${styles.navItem} ${isActive(routes.createProduct) ? styles.active : ""}`}
-              >
-                <Link to={routes.createProduct}>Form</Link>
-              </li>
-            )}
           </ul>
         </nav>
 
@@ -67,18 +68,21 @@ export default function Header() {
           </div>
           {user ? (
             <>
-              <span>{user.name}</span>
-              <IconButton onClick={() => logout()}>
+              <span>{user.fullname}</span>
+              <IconButton onClick={handleLogout}>
                 <LogOut size={22} />
               </IconButton>
             </>
           ) : (
-            <IconButton to={routes.login} as={Link}>
+            <Button to={routes.login} as={Link}>
               <LogIn size={22} />
-            </IconButton>
+              Login
+            </Button>
           )}
         </div>
+
       </Container>
+
     </header>
   );
 }
